@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Submit | ShareSpace</title>
+<title>Submit | Gen AI Projects</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -132,7 +132,6 @@
   }
   .char-counter.over { color: var(--error); font-weight: 500; }
 
-  /* File format hints */
   .format-hints {
     margin-top: 8px;
     padding: 10px 12px;
@@ -147,7 +146,6 @@
   .format-hints .row { margin-bottom: 2px; }
   .format-hints .row:last-child { margin-bottom: 0; }
 
-  /* Drop zone */
   .dropzone {
     border: 2px dashed var(--border);
     border-radius: 10px;
@@ -179,7 +177,6 @@
   }
   .dropzone input[type="file"] { display: none; }
 
-  /* Preview */
   .preview {
     margin-top: 12px;
     padding: 12px;
@@ -235,7 +232,6 @@
   }
   .preview .remove:hover { color: var(--error); border-color: var(--error); }
 
-  /* Submit */
   .submit-row {
     margin-top: 24px;
     display: flex;
@@ -352,7 +348,6 @@
   .success-panel button:hover { background: var(--off-white); }
   .success-panel a.btn-link.gold:hover { background: var(--gold-light); border-color: var(--gold-light); }
 
-  /* Footer attribution */
   .credit {
     max-width: 660px;
     margin: 16px auto 0;
@@ -372,8 +367,8 @@
 <body>
   <div class="wrapper">
     <div class="header">
-      <h1><em>ShareSpace</em></h1>
-      <p>Share your work with the group.</p>
+      <h1><em>Gen AI</em> Projects</h1>
+      <p>Share your prompts and AI-generated images with the group.</p>
     </div>
 
     <form id="submission-form" autocomplete="on">
@@ -391,13 +386,11 @@
         <label for="category">Category <span class="req">*</span></label>
         <select id="category" name="category" required>
           <option value="" disabled selected>Choose a category</option>
-          <!-- These options must match ALLOWED_CATEGORIES in Code.gs -->
-          <option value="General">General</option>
-          <option value="Category 1">Category 1</option>
-          <option value="Category 2">Category 2</option>
-          <option value="Category 3">Category 3</option>
-          <option value="Category 4">Category 4</option>
-          <option value="Category 5">Category 5</option>
+          <option value="Amazing Prompts">Amazing Prompts</option>
+          <option value="Gemini Images">Gemini Images</option>
+          <option value="ChatGPT Images">ChatGPT Images</option>
+          <option value="Claude Images">Claude Images</option>
+          <option value="Miscellaneous">Miscellaneous</option>
         </select>
       </div>
 
@@ -423,7 +416,7 @@
           <div class="row"><strong>PDFs</strong> - first-page thumbnail, click Open for full document</div>
           <div class="row"><strong>Videos</strong> (MP4, MOV, M4V, WebM) - inline player on the board</div>
           <div class="row"><strong>Audio</strong> (MP3, M4A, WAV) - inline player on the board</div>
-          <div class="row"><strong>Text</strong> (TXT, MD) - shown inline if under 50 KB</div>
+          <div class="row"><strong>Text</strong> (TXT, MD) - shown inline if under 50 KB. Great for sharing prompts!</div>
           <div class="row"><strong>Office docs</strong> (DOCX, PPTX, XLSX) - file card, click Open to view in Drive</div>
           <div class="row"><strong>Other formats</strong> - file card, click Open to download</div>
         </div>
@@ -432,20 +425,20 @@
       <div class="field">
         <label for="reflection">Reflection or short explanation</label>
         <textarea id="reflection" name="reflection" maxlength="500" rows="3"
-                  placeholder="What is this, what did you learn, or how might you use it? (optional, 500 characters)"></textarea>
+                  placeholder="What is this prompt doing, what model did you use, or how might others adapt it? (optional, 500 characters)"></textarea>
         <div class="char-counter" id="char-counter">0 of 500</div>
       </div>
 
       <div class="submit-row">
-        <button type="submit" class="primary" id="submit-btn">Share to ShareSpace</button>
-        <span class="status" id="status">Your file goes to the ShareSpace board after upload.</span>
+        <button type="submit" class="primary" id="submit-btn">Share to Gen AI Projects</button>
+        <span class="status" id="status">Your file goes to the Gen AI Projects board after upload.</span>
       </div>
       <div class="progress" id="progress"><div class="bar"></div></div>
     </form>
 
     <div class="success-panel" id="success-panel">
       <div class="check">&#10003;</div>
-      <h2>Posted to ShareSpace</h2>
+      <h2>Posted to Gen AI Projects</h2>
       <p>Your submission is live for the group to see.</p>
       <p class="redirect-note">Taking you to the board in <span id="countdown">3</span>...</p>
       <div class="btn-row">
@@ -463,11 +456,10 @@
 
 <script>
   // =====================================================================
-  // CONFIG - paste your Apps Script Web app URL here (ends in /exec)
+  // CONFIG
   // =====================================================================
-  const SCRIPT_URL = 'https://mglearn.github.io/sharespace/board.html';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpTfkLM1jrwoVBxJWPraIw6p87Ey6GYdnP_7jzGJxuy3RxwdydBJnsNcawqsEUPP6xQQ/exec';
 
-  // After successful submission, redirect to this page (relative or absolute).
   const BOARD_URL = 'board.html';
   const REDIRECT_DELAY_SECONDS = 3;
 
@@ -495,10 +487,8 @@
   let chosenFile = null;
   let redirectTimer = null;
 
-  // Set the board link href so it works even if user clicks before auto-redirect
   boardLink.href = BOARD_URL;
 
-  // Reflection counter
   reflectionEl.addEventListener('input', updateCharCounter);
   function updateCharCounter() {
     const len = reflectionEl.value.length;
@@ -506,7 +496,6 @@
     charCounter.classList.toggle('over', len > MAX_REFLECTION);
   }
 
-  // Drag and drop
   ['dragenter', 'dragover'].forEach(function (evt) {
     dropzone.addEventListener(evt, function (e) {
       e.preventDefault(); e.stopPropagation();
@@ -628,7 +617,6 @@
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || 'Upload failed.');
 
-      // Show success panel and start countdown to board
       form.style.display = 'none';
       successPanel.classList.add('active');
       startRedirectCountdown();
@@ -666,11 +654,9 @@
     form.style.display = 'block';
     submitBtn.disabled = false;
     updateCharCounter();
-    setStatus('Your file goes to the ShareSpace board after upload.', '');
+    setStatus('Your file goes to the Gen AI Projects board after upload.', '');
   });
 
-  // Cancel auto-redirect if the user clicks the manual board link first
-  // (browser navigates away anyway, but kept here for clarity)
   boardLink.addEventListener('click', function () {
     if (redirectTimer) {
       clearInterval(redirectTimer);
@@ -678,7 +664,6 @@
     }
   });
 
-  // Initialize
   updateCharCounter();
 </script>
 </body>
