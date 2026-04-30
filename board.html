@@ -506,8 +506,19 @@
       return;
     }
     try {
-      const res = await fetch(SCRIPT_URL + '?_=' + Date.now(), { method: 'GET' });
-      const data = await res.json();
+      let res;
+      try {
+        res = await fetch(SCRIPT_URL + '?_=' + Date.now(), { method: 'GET' });
+      } catch (netErr) {
+        throw new Error('Could not reach the backend. Check your internet connection and that the SCRIPT_URL is correct.');
+      }
+      const raw = await res.text();
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch (parseErr) {
+        throw new Error('Backend returned an unexpected response. Make sure the Apps Script is deployed as a Web app with access set to "Anyone", and that you redeployed after editing Code.gs.');
+      }
       if (data.error) throw new Error(data.error);
       allSubmissions = data.submissions || [];
       updateCounts();
