@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin | ShareSpace</title>
+<title>Admin | Gen AI Projects</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -411,7 +411,7 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div>
-        <h1><em>ShareSpace</em> Admin</h1>
+        <h1><em>Gen AI</em> Projects Admin</h1>
         <p class="sub">Manage submissions, edit reflections, remove items.</p>
       </div>
       <div class="actions" id="topbar-actions" style="display: none;">
@@ -434,7 +434,6 @@
       <div class="toolbar-inner">
         <select id="filter-category">
           <option value="all">All categories</option>
-          <!-- Populated from CATEGORIES below -->
         </select>
         <input type="search" id="search-input" placeholder="Search by name, email, or filename">
         <span class="count-badge" id="count-badge"></span>
@@ -460,27 +459,23 @@
 
 <script>
   // =====================================================================
-  // CONFIG - paste your Apps Script Web app URL here (ends in /exec)
+  // CONFIG
   // =====================================================================
-  const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpTfkLM1jrwoVBxJWPraIw6p87Ey6GYdnP_7jzGJxuy3RxwdydBJnsNcawqsEUPP6xQQ/exec';
   const MAX_REFLECTION = 500;
 
-  // These must match ALLOWED_CATEGORIES in Code.gs and the <option> list in submit.html
   const CATEGORIES = [
-    'General',
-    'Category 1',
-    'Category 2',
-    'Category 3',
-    'Category 4',
-    'Category 5'
+    'Amazing Prompts',
+    'Gemini Images',
+    'ChatGPT Images',
+    'Claude Images',
+    'Miscellaneous'
   ];
 
-  // Optional shorter labels. Leave empty to use the full names.
   const CATEGORY_LABELS = {};
 
   function labelFor(c) { return CATEGORY_LABELS[c] || c; }
 
-  // Populate category dropdown
   (function populateFilter() {
     const sel = document.getElementById('filter-category');
     CATEGORIES.forEach(function (c) {
